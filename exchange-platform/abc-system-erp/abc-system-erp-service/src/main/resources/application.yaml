@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: abc-system-erp
+  main:
+    web-application-type: none
+
+dubbo:
+  registry:
+    address: zookeeper://localhost:2181
+    timeout: 60000  # 等价于address连接地址后添加?init.timeout=60000
+  scan:
+    base-packages: com.abc.platform
+  application:
+    name: ${spring.application.name}
+    logger: slf4j
+    qos-enable: false
+    # https://cn.dubbo.apache.org/zh-cn/overview/mannual/java-sdk/advanced-features-and-usage/security/class-check/
+    # 检查模式分为三个级别：STRICT（默认） 严格检查，WARN 告警，DISABLE 禁用。
+    #   STRICT 严格检查：禁止反序列化所有不在允许序列化列表（白名单）中的类。
+    #   WARN 告警：仅禁止序列化所有在不允许序列化列表中（黑名单）的类，同时在反序列化不在允许序列化列表（白名单）中类的时候通过日志进行告警。
+    #   DISABLE 禁用：不进行任何检查。
+    serialize-check-status: STRICT
+    # 开启检查，不允许反序列化未实现Serializable接口的类
+    check-serializable: true
+  protocol:
+    name: dubbo
+    port: 20881
+  consumer:
+    check: false
+    retries: 0
+    #timeout: 30000
