@@ -1,8 +1,8 @@
 spring:
   application:
     name: abc-system-erp
-  main:
-    web-application-type: none
+#  main:
+#    web-application-type: none
   ### Druid多数据源配置
   datasource:
     druid:
@@ -71,3 +71,6 @@ dubbo:
     check: false
     retries: 0
     #timeout: 30000
+
+server:
+  port: 8888

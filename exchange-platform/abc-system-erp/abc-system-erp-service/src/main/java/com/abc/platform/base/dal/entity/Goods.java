@@ -1,19 +1,40 @@
 package com.abc.platform.base.dal.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+//import com.baomidou.mybatisplus.annotation.TableField;
+//import com.baomidou.mybatisplus.annotation.TableId;
+//import com.baomidou.mybatisplus.annotation.TableName;
+//import lombok.Data;
+//
+//
+//@Data
+//@TableName("group_pdm_goods")
+//public class Goods {
+//    @TableId
+//    private Long id;
+//
+//    @TableField("code")
+//    private String code;
+//
+//    @TableField("name")
+//    private String name;
+//}
+
+
 import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @Data
-@TableName("group_pdm_goods")
+@Table(name = "group_pdm_goods")
 public class Goods {
-    @TableId("id")
+    @Id
     private Long id;
 
-    @TableField("code")
+    @Column(name = "code")
     private String code;
 
-    @TableField("name")
+    @Column(name = "name")
     private String name;
 }

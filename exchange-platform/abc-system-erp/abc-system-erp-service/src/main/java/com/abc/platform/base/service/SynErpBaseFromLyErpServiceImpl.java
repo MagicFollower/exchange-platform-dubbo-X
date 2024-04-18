@@ -4,11 +4,10 @@ import com.abc.platform.base.api.ISynErpBaseFromLyErpService;
 import com.abc.platform.base.dto.SynErpGoodsFromLyErpGoodsDTO;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
-import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.List;
 
-@DubboService
+//@DubboService
 @RequiredArgsConstructor
 public class SynErpBaseFromLyErpServiceImpl implements ISynErpBaseFromLyErpService {
     @Override

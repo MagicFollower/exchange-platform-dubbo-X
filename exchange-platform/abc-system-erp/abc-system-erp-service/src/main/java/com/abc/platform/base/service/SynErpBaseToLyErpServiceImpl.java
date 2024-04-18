@@ -8,7 +8,6 @@ import com.abc.platform.base.dto.SynLyErpGoodsFromErpGoodsDTO;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

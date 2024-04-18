@@ -3,7 +3,6 @@ package com.abc.platform.datasources;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,8 @@ import javax.sql.DataSource;
 import java.io.IOException;
 
 @Configuration
-@MapperScan(basePackages = "com.abc.platform.business.dal.persistence", sqlSessionFactoryRef = "sqlSessionFactoryBusiness")
+@tk.mybatis.spring.annotation.MapperScan(basePackages = "com.abc.platform.business.dal.persistence", sqlSessionFactoryRef = "sqlSessionFactoryBusiness")
+//@MapperScan(basePackages = "com.abc.platform.business.dal.persistence", sqlSessionFactoryRef = "sqlSessionFactoryBusiness")
 public class BusinessDataSource {
 
     /**
@@ -40,7 +40,7 @@ public class BusinessDataSource {
     }
 
     // @Primary
-    @Bean(name = "sqlSessionFactoryBusiness")
+    @Bean(name = "platformTransactionManagerBusiness")
     public PlatformTransactionManager transactionManagerBusiness(@Qualifier("dataSourceBusiness") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
