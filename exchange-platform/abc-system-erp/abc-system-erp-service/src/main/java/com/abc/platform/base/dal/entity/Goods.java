@@ -20,7 +20,9 @@ package com.abc.platform.base.dal.entity;
 //}
 
 
+import com.abc.platform.util.AbcTkGlobalIdGen;
 import lombok.Data;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -30,6 +32,7 @@ import javax.persistence.Table;
 @Table(name = "group_pdm_goods")
 public class Goods {
     @Id
+    @KeySql(genId = AbcTkGlobalIdGen.class)
     private Long id;
 
     @Column(name = "code")

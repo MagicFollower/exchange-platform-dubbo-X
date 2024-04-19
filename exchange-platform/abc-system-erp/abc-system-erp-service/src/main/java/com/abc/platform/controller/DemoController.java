@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * 测试多数据源环境下，使用@Transactional注解时事务失效的问题
+ */
 @RestController
-@RequestMapping("/erp-api")
+@RequestMapping("/erp-demo")
 @RequiredArgsConstructor
 public class DemoController {
 
