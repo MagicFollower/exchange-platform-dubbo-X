@@ -5,6 +5,10 @@ dubbo:
   registry:
     address: zookeeper://localhost:2181
     timeout: 60000  # 等价于address连接地址后添加?init.timeout=60000
+  consumer:
+    check: false
+    retries: 0
+    timeout: 30000
 
 spring:
   application:
