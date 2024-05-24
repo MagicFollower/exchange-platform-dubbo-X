@@ -51,7 +51,7 @@ dubbo:
     address: zookeeper://localhost:2181
     timeout: 60000  # 等价于address连接地址后添加?init.timeout=60000
   scan:
-    base-packages: com.abc.platform
+    base-packages: com.abc.exchange.erp
   application:
     name: ${spring.application.name}
     logger: slf4j
