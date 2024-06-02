@@ -2,6 +2,7 @@ package com.abc.exchange.erp.controller;
 
 import com.abc.exchange.erp.base.dal.entity.Goods;
 import com.abc.exchange.erp.base.dal.persistence.GoodsMapper;
+import com.abc.exchange.erp.business.dal.entity.GroupSdbOrd;
 import com.abc.exchange.erp.business.dal.persistence.GroupSdbOrdMapper;
 import com.abc.system.common.constant.SystemRetCodeConstants;
 import com.abc.system.common.exception.business.BizException;
@@ -25,31 +26,50 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 @RequestMapping("/erp-demo")
 @RequiredArgsConstructor
-public class DemoController {
+public class Tx1DemoController {
     private final GoodsMapper goodsMapper;
     private final GroupSdbOrdMapper groupSdbOrdMapper;
-    private PlatformTransactionManager transactionManager;
+
+    /**
+     * 手动控制事务提交与回滚的注意事项：
+     * <pre>
+     * 1.PlatformTransactionManager是一个接口，继承了TransactionManager接口；
+     * 2.PlatformTransactionManager提供了三个API：开启事务(获取事务_返回TransactionStatus)、提交事务commit、混滚事务rollback；
+     * 3.提交与混滚顺序要和声明事务顺序相反。
+     * </pre>
+     */
+    private PlatformTransactionManager txManagerBase;
+    private PlatformTransactionManager txManagerBusiness;
 
     @PostMapping("/api01")
     public String api01AndSendMessage() throws BizException {
-        TransactionDefinition definitionOne = new DefaultTransactionDefinition();
-        TransactionStatus txStatus = transactionManager.getTransaction(definitionOne);
+        TransactionDefinition defaultTxDefinition = new DefaultTransactionDefinition();
+        TransactionStatus txStatusBase = txManagerBase.getTransaction(defaultTxDefinition);
+        TransactionStatus txStatusBusiness = txManagerBusiness.getTransaction(defaultTxDefinition);
         try {
+            int x = 10 / 0;
+
             Goods goods = new Goods();
             goods.setId(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE));
             goods.setCode("code-" + RandomStringUtils.randomAlphabetic(10));
             goods.setName("name-" + RandomStringUtils.randomAlphabetic(10));
             goodsMapper.insert(goods);
 
-//            int x = 1 / 0;
-            transactionManager.commit(txStatus);
+            GroupSdbOrd groupSdbOrd = new GroupSdbOrd();
+            groupSdbOrd.setId(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE));
+            groupSdbOrd.setBillNo("billNo-" + RandomStringUtils.randomAlphabetic(10));
+            groupSdbOrdMapper.insertSelective(groupSdbOrd);
         } catch (BizException e) {
-            transactionManager.rollback(txStatus);
+            txManagerBusiness.rollback(txStatusBusiness);
+            txManagerBase.rollback(txStatusBase);
             throw e;
         } catch (Exception e) {
-            transactionManager.rollback(txStatus);
+            txManagerBusiness.rollback(txStatusBusiness);
+            txManagerBase.rollback(txStatusBase);
             throw new BizException(SystemRetCodeConstants.OP_FAILED);
         }
+        txManagerBusiness.commit(txStatusBusiness);
+        txManagerBase.commit(txStatusBase);
         sendMessage();
         return "200";
     }
@@ -57,7 +77,7 @@ public class DemoController {
     public void sendMessage() throws BizException {
         try {
             System.out.println("开始发送消息...");
-            Thread.sleep(10000);
+            Thread.sleep(2000);
             System.out.println("消息发送成功！");
         } catch (Exception e) {
             throw new BizException(SystemRetCodeConstants.OP_FAILED);
@@ -65,7 +85,12 @@ public class DemoController {
     }
 
     @Autowired
-    public void setTransactionManager(@Qualifier("platformTransactionManagerBase") PlatformTransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
+    public void setTxManagerBase(@Qualifier("platformTransactionManagerBase") PlatformTransactionManager transactionManager) {
+        this.txManagerBase = transactionManager;
+    }
+
+    @Autowired
+    public void setTxManagerBusiness(@Qualifier("platformTransactionManagerBusiness") PlatformTransactionManager transactionManager) {
+        this.txManagerBusiness = transactionManager;
     }
 }
