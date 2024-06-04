@@ -1,6 +1,6 @@
 package com.abc.exchange.controller.lyerp;
 
-import com.abc.exchange.erp.base.api.ISynErpBaseToLyErpService;
+import com.abc.exchange.base.api.ISynErpBaseToLyErpService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.PostMapping;
